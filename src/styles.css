@@ -1,0 +1,536 @@
+/* ===== 색과 글꼴 ===== */
+:root {
+  --bg: #eef1f6;
+  --surface: #ffffff;
+  --ink: #1e2433;
+  --muted: #5f6779;
+  --line: #d8dde7;
+  --shell: #e8476a;
+  --shell-dark: #c7334f;
+  --on-shell: #ffffff;
+  --lcd: #d6e6bf;
+  --lcd-ink: #2b3720;
+  --accent: #3563d9;
+  --danger: #c62828;
+  --font-display: 'Jua', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-body: 'Gowun Dodum', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12151c;
+    --surface: #1b1f29;
+    --ink: #e7eaf1;
+    --muted: #9aa2b4;
+    --line: #2e3442;
+    --shell: #d93f61;
+    --shell-dark: #b02d4b;
+    --accent: #84a6ff;
+    --danger: #ff7a7a;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; margin: 0; line-height: 1.25; }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* ===== 버튼 ===== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1.5px solid transparent; border-radius: 12px;
+  padding: 10px 16px; font-family: var(--font-display); font-size: 1rem;
+  cursor: pointer; text-decoration: none; transition: transform .08s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: .6; cursor: default; }
+.btn-primary { background: var(--shell); color: var(--on-shell); box-shadow: 0 3px 0 var(--shell-dark); }
+.btn-primary:hover { background: var(--shell-dark); }
+.btn-quiet { background: transparent; border-color: var(--line); color: var(--ink); }
+.btn-quiet:hover { border-color: var(--muted); }
+.btn-big { width: 100%; padding: 14px 18px; font-size: 1.15rem; }
+.link-btn {
+  background: none; border: none; padding: 4px 2px; cursor: pointer;
+  color: var(--muted); font-size: .9rem; text-decoration: underline; text-underline-offset: 3px;
+}
+.link-btn:hover { color: var(--ink); }
+.link-btn.danger { color: var(--danger); font-weight: 700; }
+
+/* ===== 전체 배치 ===== */
+.app { max-width: 1180px; margin: 0 auto; padding: 20px 24px 48px; }
+.topbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 16px; }
+.brand { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
+.owner { font-family: var(--font-display); font-size: 1.05rem; color: var(--ink); background: var(--surface); border: 1.5px solid var(--line); border-radius: 999px; padding: 1px 12px; }
+.logo { font-size: 1.7rem; color: var(--shell); }
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+.streak { font-family: var(--font-display); background: var(--surface); border: 1.5px solid var(--line); border-radius: 999px; padding: 2px 12px; }
+.demo-note { margin: 0 0 18px; font-size: .9rem; color: var(--muted); }
+.sync-note { margin: 0 0 14px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--shell); background: var(--surface); font-size: .9rem; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.side .sync-note { margin: 0; }
+.field select:disabled, .field input:disabled { opacity: .6; cursor: not-allowed; }
+
+.layout { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 40px; align-items: start; }
+.side { position: sticky; top: calc(20px + env(safe-area-inset-top, 0px)); display: grid; gap: 18px; }
+.content { display: grid; gap: 28px; min-width: 0; }
+
+.app--mobile { max-width: 560px; padding: 14px 16px 40px; }
+.app--mobile .layout { grid-template-columns: 1fr; gap: 24px; }
+.app--mobile .side { position: static; }
+.app--mobile .logo { font-size: 1.45rem; }
+
+/* ===== 펫 기기 (이 앱의 얼굴) ===== */
+.device {
+  width: 100%; max-width: 320px; margin: 0 auto;
+  background: var(--shell);
+  border-radius: 48% 48% 42% 42% / 36% 36% 30% 30%;
+  padding: 50px 30px 26px;
+  box-shadow: inset 0 -10px 0 var(--shell-dark), inset 0 6px 0 rgba(255, 255, 255, .22), 0 14px 30px rgba(30, 36, 51, .18);
+}
+.lcd {
+  background-color: var(--lcd);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(43, 55, 32, .05) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(43, 55, 32, .05) 0 1px, transparent 1px 4px);
+  color: var(--lcd-ink);
+  border-radius: 14px;
+  padding: 12px 14px 14px;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, .25);
+  font-family: var(--font-display);
+}
+.lcd-top { display: flex; justify-content: space-between; gap: 8px; font-size: .95rem; white-space: nowrap; }
+.pet-stage { position: relative; height: 112px; display: grid; place-items: end center; }
+.pet {
+  font-size: 80px; line-height: 1; display: inline-block;
+  transform-origin: 50% 100%;
+}
+
+/* 표정 말풍선 (펫 오른쪽 위) */
+.pet-face {
+  position: absolute; top: 0; right: 0; max-width: 42%;
+  padding: 2px 7px; border: 1.5px solid var(--lcd-ink); border-radius: 10px 10px 10px 2px;
+  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', var(--font-body); font-size: 12px; line-height: 1.4;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  animation: face-in .3s ease-out;
+}
+@keyframes face-in { from { transform: scale(.6); opacity: 0; } }
+
+/* 효과 기호 (펫 왼쪽 위에서 떠오름) */
+.pet-fx {
+  position: absolute; top: 14px; left: 14%; font-size: 22px; line-height: 1;
+  animation: fx-float 2.2s ease-out infinite;
+}
+@keyframes fx-float {
+  0% { transform: translateY(14px) scale(.7); opacity: 0; }
+  25% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(-8px) scale(1); opacity: 0; }
+}
+
+/* ----- 동작: 알 ----- */
+.motion-wiggle { animation: wiggle 1.2s ease-in-out infinite; }
+@keyframes wiggle {
+  20% { transform: translateY(-6px) rotate(-12deg); }
+  40% { transform: rotate(10deg); }
+  60% { transform: translateY(-4px) rotate(-8deg); }
+  80% { transform: rotate(6deg); }
+}
+.motion-rock { animation: rock 3s ease-in-out infinite; }
+@keyframes rock { 25% { transform: rotate(-5deg); } 75% { transform: rotate(5deg); } }
+
+/* ----- 동작: 아기 ----- */
+.motion-bounce { animation: bounce .7s ease-out infinite; }
+@keyframes bounce {
+  0%, 100% { transform: scale(1.06, .94); }
+  45% { transform: translateY(-20px) scale(.96, 1.04); }
+}
+.motion-waddle { animation: waddle 2s ease-in-out infinite; }
+@keyframes waddle {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  20% { transform: translateX(-10px) rotate(-7deg); }
+  40% { transform: translateX(-14px) rotate(4deg); }
+  60% { transform: translateX(10px) rotate(7deg); }
+  80% { transform: translateX(14px) rotate(-4deg); }
+}
+
+/* ----- 동작: 청소년 ----- */
+.motion-flip { animation: flip 1.6s ease-in-out infinite; }
+@keyframes flip {
+  0%, 30%, 100% { transform: none; }
+  55% { transform: translateY(-24px) rotateY(180deg); }
+  80% { transform: rotateY(360deg); }
+}
+.motion-nod { animation: nod .9s ease-in-out infinite; }
+@keyframes nod { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(7deg) translateY(2px); } }
+
+/* ----- 동작: 어른 ----- */
+.motion-proud { animation: proud 1.6s ease-in-out infinite; }
+@keyframes proud { 50% { transform: translateY(-5px) scale(1.08); } }
+.motion-breathe { animation: breathe 4s ease-in-out infinite; }
+@keyframes breathe { 50% { transform: scale(1.04, .97); } }
+
+/* ----- 배고픔·굶주림: 단계마다 눈 감고 엎드린 그림으로 바뀌어 숨만 쉬어요 (그림은 StageIcon.jsx) ----- */
+.motion-lie { animation: lie 3.2s ease-in-out infinite; }
+.motion-lie-limp { animation: lie-limp 5s ease-in-out infinite; opacity: .8; }
+@keyframes lie { 50% { transform: scale(1.02, 1.06); } }
+@keyframes lie-limp { 0%, 100% { transform: scale(1.04, .9); } 50% { transform: scale(1.05, .93); } }
+
+/* 선물 상자는 배고파도 눕지 않아요: 조용히 숨만 쉬거나(배고픔), 살짝 찌그러져 흐려져요(굶주림) */
+.motion-box-rest { animation: box-rest 4s ease-in-out infinite; }
+.motion-box-limp { animation: box-limp 5s ease-in-out infinite; opacity: .75; }
+@keyframes box-rest { 50% { transform: scale(1.02, .97); } }
+@keyframes box-limp { 0%, 100% { transform: scale(1.04, .9); } 50% { transform: scale(1.05, .88); } }
+
+/* ===== 동물별 특별 장면 (lib/moods.js 의 SCENES) ===== */
+.art { display: inline-block; vertical-align: bottom; }
+.prop {
+  position: absolute; line-height: 1; pointer-events: none;
+}
+
+/* 아기 강아지: 통통 튀는 고무공 쫓기 */
+.prop--ball { bottom: 0; left: calc(50% - 86px); font-size: 26px; z-index: 1; }
+.prop--ball.is-bounce { animation: ball-bounce .9s infinite; }
+.prop--ball.is-roll { animation: ball-roll 2.2s ease-in-out infinite; }
+@keyframes ball-roll { 50% { transform: translateX(-18px) rotate(-320deg); } }
+.prop--ball.is-away { left: 4px; }
+@keyframes ball-bounce {
+  0%, 100% { transform: translateY(0) scale(1.1, .88); animation-timing-function: ease-out; }
+  12% { transform: translateY(-4px) scale(1); }
+  50% { transform: translateY(-38px); animation-timing-function: ease-in; }
+}
+.motion-pounce { animation: pounce .9s ease-in-out infinite; }
+.motion-paw { animation: paw 2.2s ease-in-out infinite; }
+@keyframes pounce {
+  0%, 100% { transform: none; }
+  40% { transform: translate(-6px, -14px) rotate(-8deg); }
+  60% { transform: translate(-8px, 0) rotate(-4deg) scale(1.04, .96); }
+}
+@keyframes paw { 0%, 100% { transform: none; } 50% { transform: translateX(-6px) rotate(-6deg); } }
+
+/* 강아지: 날아오는 원반 잡기 */
+.prop--frisbee { bottom: 0; left: calc(50% - 74px); font-size: 28px; }
+.prop--frisbee.is-fly { animation: frisbee-fly 1.8s ease-in-out infinite; }
+.prop--frisbee.is-spin { animation: frisbee-spin 1.6s ease-in-out infinite; }
+.prop--frisbee.is-still { left: 2px; }
+.prop--frisbee.is-away { left: 2px; transform: rotate(-30deg); }
+@keyframes frisbee-fly {
+  0% { transform: translate(-34px, -80px) rotate(-25deg); opacity: 0; }
+  15% { opacity: 1; }
+  55% { transform: translate(30px, -74px) rotate(0); }
+  70% { transform: translate(32px, -70px); }
+  85%, 95% { transform: translate(34px, -44px); opacity: 1; }
+  100% { transform: translate(34px, -44px); opacity: 0; }
+}
+@keyframes frisbee-spin { 50% { transform: rotate(-12deg) translateY(-3px); } }
+.motion-leap { animation: leap 1.8s ease-in-out infinite; }
+.motion-wag { animation: wag .7s ease-in-out infinite; }
+@keyframes leap {
+  0%, 35%, 100% { transform: none; }
+  55% { transform: translateY(-30px) rotate(-12deg); }
+  70% { transform: translateY(-26px) rotate(-6deg); }
+  85% { transform: translateY(0) scale(1.04, .96); }
+}
+@keyframes wag { 50% { transform: rotate(-4deg) translateY(-2px); } }
+
+/* 주니어 곰: 꿀단지에 얼굴을 묻고 꿀 먹기 */
+.prop--honey { bottom: -2px; left: calc(50% - 18px); font-size: 36px; transform-origin: 50% 100%; z-index: 1; } /* 앉은 곰의 무릎 위 */
+.prop--honey.is-eat { animation: pot-wobble .8s ease-in-out infinite; }
+.prop--honey.is-eat-slow { animation: pot-wobble 1.6s ease-in-out infinite; }
+.prop--honey.is-still { left: auto; right: 4px; }
+.prop--honey.is-tipped { left: auto; right: 6px; bottom: 2px; transform: rotate(80deg); }
+@keyframes pot-wobble { 50% { transform: rotate(-6deg) translateX(-2px); } }
+.motion-munch { animation: munch .8s ease-in-out infinite; }
+.motion-munch-slow { animation: munch 1.6s ease-in-out infinite; }
+@keyframes munch { 50% { transform: translateY(4px) scale(1.04, .94); } } /* 꿀단지 쪽으로 고개를 숙였다 들기 */
+
+/* 주니어 공룡: 안경 쓰고 책 읽기 (책은 그림에 들어 있어요) */
+.motion-read { animation: read 1.6s ease-in-out infinite; }
+.motion-read-slow { animation: read 3.2s ease-in-out infinite; }
+@keyframes read {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-3deg) translateY(-2px); }
+  50% { transform: rotate(0) translateY(1px); }
+  75% { transform: rotate(3deg) translateY(-2px); }
+}
+
+/* 그리즐리 베어: 웃으며 재빠르게 달리기 */
+.prop--grizzly { bottom: 20px; left: calc(50% + 58px); font-size: 26px; }
+.prop--grizzly.is-puff { animation: puff .5s ease-out infinite; }
+.prop--grizzly.is-puff-slow { animation: puff 1s ease-out infinite; }
+@keyframes puff {
+  from { transform: translateX(0) scale(.6); opacity: 1; }
+  to { transform: translateX(20px) scale(1.15); opacity: 0; }
+}
+.motion-dash { animation: dash .5s ease-in-out infinite; }
+.motion-trot { animation: trot 1s ease-in-out infinite; }
+@keyframes dash {
+  0%, 100% { transform: none; }
+  30% { transform: translate(-7px, -10px) rotate(-5deg); }
+  60% { transform: translate(-2px, 0) rotate(2deg); }
+}
+@keyframes trot { 50% { transform: translateY(-5px) rotate(-2deg); } }
+
+/* 티라노: 늠름하게 쿵쿵 */
+.motion-stomp { animation: stomp 2.4s ease-in-out infinite; }
+.motion-stand-tall { animation: stand-tall 4s ease-in-out infinite; }
+@keyframes stomp {
+  0%, 55%, 100% { transform: none; }
+  66% { transform: translateY(-9px) rotate(-3deg); }
+  72% { transform: translateY(0) scale(1.06, .94); }
+  77% { transform: translateX(-2px); }
+  82% { transform: translateX(2px); }
+  87% { transform: none; }
+}
+@keyframes stand-tall { 25% { transform: rotate(-2deg) scale(1.02); } 75% { transform: rotate(2deg) scale(1.02); } }
+
+/* 용: 구름을 가르며 하늘로 날아가기 (구름이 아래로 지나가서 올라가는 것처럼 보임) */
+.prop--sky { top: 0; font-size: 26px; opacity: 0; }
+.prop--sky.prop-0 { left: 6%; }
+.prop--sky.prop-1 { right: 8%; }
+.prop--sky.is-rise { animation: cloud-down 2.4s linear infinite; }
+.prop--sky.is-rise-slow { animation: cloud-down 4.8s linear infinite; }
+.prop--sky.prop-1.is-rise { animation-delay: -1.2s; }
+.prop--sky.prop-1.is-rise-slow { animation-delay: -2.4s; }
+@keyframes cloud-down {
+  0% { transform: translateY(-6px); opacity: 0; }
+  20%, 75% { opacity: .9; }
+  100% { transform: translateY(84px); opacity: 0; }
+}
+.motion-soar { animation: soar .9s ease-in-out infinite; }
+.motion-glide { animation: glide 3s ease-in-out infinite; }
+@keyframes soar {
+  0%, 100% { transform: translateY(-16px) scale(1, 1); }
+  50% { transform: translateY(-26px) scale(1.03, .92); }
+}
+@keyframes glide { 0%, 100% { transform: translateY(-12px); } 50% { transform: translateY(-20px); } }
+
+/* ----- 보상 받은 직후 ----- */
+.motion-cheer { animation: hop .45s ease-out 4; }
+@keyframes hop { 40% { transform: translateY(-18px) scale(1.05, .95); } }
+.lcd-msg { text-align: center; margin: 8px 0 10px; min-height: 1.6em; font-size: 1.05rem; }
+.meter { display: grid; gap: 2px; margin-top: 6px; }
+.meter-label { font-size: .82rem; }
+.meter-bar { display: flex; gap: 3px; }
+.meter-bar i { flex: 1; height: 9px; border: 1.5px solid var(--lcd-ink); border-radius: 2px; }
+.meter-bar i.on { background: var(--lcd-ink); }
+.device-buttons { display: flex; justify-content: center; gap: 22px; margin-top: 20px; }
+.device-buttons span { width: 22px; height: 22px; border-radius: 50%; background: rgba(255, 255, 255, .75); box-shadow: 0 3px 0 var(--shell-dark); }
+.device-buttons span:nth-child(2) { transform: translateY(6px); }
+
+.notes { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.notes li { border-left: 3px solid var(--shell); padding: 2px 0 2px 10px; font-size: .92rem; color: var(--muted); }
+
+.practice { display: grid; gap: 10px; }
+.practice-hint { margin: 0; font-size: .88rem; color: var(--muted); text-align: center; }
+.practice-row .btn small { font-size: .78rem; color: var(--muted); }
+.practice-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.rewards-left { font-size: .92rem; }
+.rewards-left strong { font-family: var(--font-display); font-size: 1.15rem; color: var(--shell); font-weight: 400; }
+.mobile-note { margin: 0; text-align: center; color: var(--muted); font-size: .92rem; }
+
+/* ===== 종류 탭 ===== */
+/* 탭이 넘치면 다음 줄로 (옆으로 숨지 않게) */
+.type-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tab {
+  flex: none; border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px;
+  padding: 5px 14px; cursor: pointer; font-size: .92rem; white-space: nowrap;
+}
+.tab.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+/* 모바일: 3개씩 두 줄로 고르게, 누르기 쉽게 크게 */
+.app--mobile .type-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.app--mobile .tab { padding: 8px 4px; border-radius: 14px; text-align: center; white-space: normal; word-break: keep-all; line-height: 1.3; }
+
+/* ===== 요약 ===== */
+.summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; }
+.summary-item { padding: 2px 16px; border-left: 1.5px solid var(--line); }
+.summary-item:first-child { border-left: none; padding-left: 0; }
+.summary dt { font-size: .85rem; color: var(--muted); }
+.summary dd { margin: 0; font-family: var(--font-display); font-size: 2rem; line-height: 1.2; }
+.summary dd small { font-size: .95rem; margin-left: 2px; color: var(--muted); }
+.app--mobile .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 14px; }
+.app--mobile .summary-item:nth-child(3) { border-left: none; padding-left: 0; }
+
+/* ===== 그래프 ===== */
+.chart { margin: 0; background: var(--surface); border: 1.5px solid var(--line); border-radius: 16px; padding: 12px 10px 4px; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart-grid { stroke: var(--line); stroke-dasharray: 4 4; }
+.chart-label { fill: var(--muted); font-size: 12px; font-family: var(--font-body); }
+.chart-line { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.chart-dot { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
+.chart-dot.best { fill: var(--shell); stroke: var(--shell); }
+.chart-best { fill: var(--shell); font-family: var(--font-display); font-size: 14px; }
+.empty-chart { margin: 0; padding: 18px; border: 1.5px dashed var(--line); border-radius: 16px; color: var(--muted); text-align: center; }
+
+/* ===== 기록 목록 ===== */
+.records-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.records-head h2 { font-size: 1.35rem; }
+.records-controls { display: flex; gap: 8px; }
+.records-controls select { padding: 6px 10px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--surface); }
+.record-list { list-style: none; margin: 0; padding: 0; }
+.month { font-family: var(--font-display); color: var(--muted); padding: 18px 0 4px; }
+.record { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1.5px solid var(--line); }
+.record-main { display: grid; gap: 1px; min-width: 0; }
+.record-speed { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.2; display: flex; align-items: center; gap: 6px; }
+.record-speed small { font-size: .85rem; color: var(--muted); }
+.badge { font-size: .75rem; background: var(--shell); color: var(--on-shell); border-radius: 999px; padding: 1px 8px; }
+.record-meta { font-size: .9rem; color: var(--muted); }
+.record-memo { font-size: .92rem; }
+.record-side { display: grid; justify-items: end; align-content: start; gap: 2px; text-align: right; flex: none; }
+.record-side time { font-size: .85rem; color: var(--muted); }
+.record-actions { display: flex; gap: 8px; }
+.more { margin-top: 14px; width: 100%; }
+.app--mobile .record { flex-direction: column; gap: 4px; }
+.app--mobile .record-side { justify-items: start; text-align: left; }
+.empty { color: var(--muted); }
+
+.empty-state { background: var(--surface); border: 1.5px dashed var(--line); border-radius: 18px; padding: 32px 24px; text-align: center; display: grid; gap: 10px; justify-items: center; }
+.empty-state p { margin: 0; color: var(--muted); max-width: 36ch; }
+
+/* ===== 입력 창 ===== */
+.overlay { position: fixed; inset: 0; background: rgba(12, 15, 22, .5); display: grid; place-items: center; padding: 20px; z-index: 20; }
+.sheet { width: 100%; max-width: 440px; background: var(--surface); border-radius: 20px; padding: 24px; display: grid; gap: 14px; box-shadow: 0 20px 50px rgba(0, 0, 0, .3); animation: rise .18s ease-out; }
+@keyframes rise { from { transform: translateY(12px); opacity: 0; } }
+.sheet h2 { font-size: 1.4rem; }
+.sheet-sub { margin: -8px 0 0; color: var(--muted); font-size: .92rem; }
+.field { display: grid; gap: 4px; }
+.field span { font-size: .88rem; color: var(--muted); }
+.field input, .field select {
+  width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--bg);
+}
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-error { margin: 0; color: var(--danger); font-size: .92rem; }
+.form-confirm { margin: 0; padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--shell); font-size: .92rem; }
+.sheet-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+/* ===== 로그인 / 로딩 ===== */
+.login { flex: 1; display: grid; place-items: center; padding: 20px; }
+.login-card { width: 100%; max-width: 380px; display: grid; gap: 14px; }
+.login-card form { display: grid; gap: 14px; }
+.login-card p { margin: 0; color: var(--muted); }
+.login-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.login-tabs .tab { padding: 9px 8px; border-radius: 12px; }
+.login-hint { font-size: .85rem; }
+.loading { padding: 40px; text-align: center; color: var(--muted); display: grid; gap: 12px; justify-items: center; }
+.admin-note { font-size: .8rem; opacity: .8; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ===== 새 친구 맞이하기 화면 ===== */
+.picker { flex: 1; display: grid; place-items: center; padding: 24px 16px; }
+.picker-card { width: 100%; max-width: 680px; display: grid; gap: 18px; }
+.picker-head { display: grid; gap: 6px; }
+.picker-head h2 { font-size: 1.5rem; }
+.picker-head p { margin: 0; color: var(--muted); }
+
+/* ===== 연습 단계표 ===== */
+.path { background: var(--surface); border: 1.5px solid var(--line); border-radius: 16px; padding: 14px 16px; display: grid; gap: 8px; }
+.path-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.path-head h2 { font-size: 1.15rem; }
+.path-tip { font-size: .8rem; color: var(--muted); }
+.path-stars { font-size: .72rem; color: #f5b301; letter-spacing: -1px; margin-left: 2px; }
+.path-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.path-item { display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 2px 8px; padding: 6px 8px; border-radius: 10px; }
+.path-mark { text-align: center; font-family: var(--font-display); color: var(--muted); }
+.path-name { font-size: .95rem; }
+.path-name { min-width: 0; }
+.path-rate { font-size: .8rem; color: var(--muted); text-align: right; word-break: keep-all; }
+.path-item--done .path-name { color: var(--muted); }
+.path-item--now { background: var(--bg); border: 1.5px solid var(--shell); }
+.path-item--now .path-mark, .path-item--now .path-rate { color: var(--shell); }
+.path-item--now .path-name { font-family: var(--font-display); font-size: 1.05rem; }
+.path-goal { grid-column: 2 / -1; display: flex; flex-wrap: wrap; gap: 2px 10px; font-size: .82rem; padding-top: 2px; }
+.path-goal-title { flex-basis: 100%; color: var(--muted); }
+.goal { color: var(--ink); }
+.goal.ok { color: var(--shell); }
+
+/* ===== 입력 창: 예상 보상 ===== */
+.preview { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--bg); display: grid; gap: 4px; }
+.preview-xp { font-family: var(--font-display); font-size: 1.15rem; color: var(--shell); }
+.preview ul { margin: 0; padding-left: 18px; font-size: .85rem; color: var(--muted); }
+
+/* ===== 명예의 전당 ===== */
+.hall { background: var(--surface); border: 1.5px solid var(--line); border-radius: 16px; padding: 14px 16px; display: grid; gap: 10px; }
+.hall-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.hall-head h2 { font-size: 1.15rem; }
+.hall-count { font-size: .82rem; color: var(--muted); }
+.hall-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.hall-item {
+  display: grid; justify-items: center; gap: 1px; padding: 10px 6px 8px; text-align: center;
+  background: var(--bg); border-radius: 12px; border-bottom: 3px solid var(--shell);
+}
+.hall-emoji { font-size: 36px; line-height: 1.15; }
+.hall-name { font-family: var(--font-display); font-size: 1rem; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hall-species { font-size: .78rem; color: var(--muted); }
+.hall-stats { font-size: .75rem; line-height: 1.35; }
+.hall-date { font-size: .72rem; color: var(--muted); }
+.hall--compact .hall-list { grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); }
+
+/* 다 자랐을 때 안내 카드 */
+.retire { border: 2px solid var(--shell); border-radius: 16px; padding: 14px 16px; display: grid; gap: 8px; background: var(--surface); }
+.retire-title { margin: 0; font-family: var(--font-display); font-size: 1.1rem; color: var(--shell); }
+.retire-text { margin: 0; font-size: .88rem; color: var(--muted); }
+
+/* 새 친구 맞이하기 */
+.mystery { display: flex; justify-content: center; align-items: flex-end; gap: 18px; font-size: 64px; line-height: 1; padding: 10px 0; }
+.mystery-item { display: inline-block; transform-origin: 50% 100%; animation: wiggle 1.6s ease-in-out infinite; }
+.mystery-item--late { animation-delay: -.8s; }
+.mystery-q { font-family: var(--font-display); font-size: 48px; color: var(--shell); align-self: center; }
+
+/* 이름 짓기 */
+.name-sheet { text-align: center; justify-items: center; }
+.name-sheet .field, .name-sheet .sheet-actions { width: 100%; }
+.name-pet { font-size: 72px; line-height: 1; display: inline-block; animation: hop .45s ease-out 3; transform-origin: 50% 100%; }
+.name-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+
+
+/* ===== 결과 팝업 ===== */
+.result-sheet { max-width: 500px; max-height: calc(100vh - 40px); overflow-y: auto; }
+.result-head { display: flex; align-items: center; gap: 14px; }
+.result-pet { font-size: 64px; line-height: 1; flex: none; display: inline-block; transform-origin: 50% 100%; }
+.result-pet--grew { animation: hop .45s ease-out 4; }
+.result-head h2 { font-size: 1.35rem; }
+.result-head .sheet-sub { margin: 2px 0 0; }
+.result-block { display: grid; gap: 6px; padding-top: 10px; border-top: 1.5px solid var(--line); }
+.result-block h3 { font-size: 1.02rem; color: var(--shell); }
+.result-stats { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.result-stats li { display: flex; justify-content: space-between; gap: 12px; font-size: .92rem; }
+.result-stats span { color: var(--muted); flex: none; }
+.result-stats strong { font-weight: 400; font-family: var(--font-display); text-align: right; }
+.result-bar { height: 10px; border-radius: 999px; background: var(--bg); overflow: hidden; border: 1.5px solid var(--line); }
+.result-bar i { display: block; height: 100%; background: var(--shell); border-radius: 999px; }
+.result-notes { margin: 0; padding-left: 18px; font-size: .88rem; color: var(--muted); }
+.result-plan ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: .92rem; }
+.result-plan li::marker { color: var(--shell); font-family: var(--font-display); }
+.sheet-actions .btn { text-decoration: none; text-align: center; }
+
+/* ===== 화면 맨 아래: 제작자·저작권 ===== */
+#root { min-height: 100vh; display: flex; flex-direction: column; }
+#root > .app, #root > main, #root > .loading { width: 100%; }
+.site-footer {
+  margin-top: auto; padding: 18px 16px 22px; text-align: center;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 12px;
+  font-size: .78rem; color: var(--muted); border-top: 1px solid var(--line);
+}.title-balloon {
+  font-family: 'Jua', sans-serif;
+  color: #ff6b81;
+  text-shadow: 
+    0px 3px 0px #d63031,
+    0px 6px 0px rgba(0, 0, 0, 0.2);
+  letter-spacing: 2px;
+  display: inline-block;
+}
